@@ -2,6 +2,7 @@
     "userspace_version": "1.0",
     "build_targets": [
         ["splitkb/kyria/rev3", "teelahti"],
-        ["kaly/kaly42", "teelahti"]
+        ["kaly/kaly42", "teelahti"],
+        ["splitkb/kyria/rev1", "teelahti"]
     ]
 }
