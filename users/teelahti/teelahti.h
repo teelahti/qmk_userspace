@@ -9,6 +9,7 @@ enum layers {
     _SNUM,
     _FNUM,
     _NAV,
+    _MEDIA,
     _CODE,
     _CTL
 };
@@ -36,14 +37,14 @@ enum custom_keycodes {
 #define CMIN LCTL(FI_MINS)   // CTRL + -
 
 // Layer change keys
-// Change the base layer between Mac and Win
-#define LT_ENT LT(_FNUM,KC_ENT)
+#define LT_ENT LT(_NAV,KC_ENT)
 #define LT_ENT2 LT(_CTL,KC_ENT)
 #define LT_SPC LT(_CODE,KC_SPC)
 #define LT_SPC2 LT(_SNUM,KC_SPC)
 #define LT_DEL LT(_FNUM,KC_DEL)
 #define LT_NUM LT(_NUM,KC_DEL)
 #define LT_NAV LT(_NAV,KC_BSPC)
+#define LT_MED MO(_MEDIA)
 
 // Some of the default FI_* symbols do not work with MacOS
 #define PIPE LALT(KC_7)    // FI_PIPE, |
