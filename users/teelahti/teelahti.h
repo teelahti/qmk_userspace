@@ -35,6 +35,7 @@ enum custom_keycodes {
 #define RDELWRD RALT(KC_BSPC)
 #define SF12 LSFT(KC_F12)    // SHIFT + F12
 #define CMIN LCTL(FI_MINS)   // CTRL + -
+#define CPLUS LCTL(FI_PLUS)  // CTRL + +
 
 // Layer change keys
 #define LT_ENT LT(_NAV,KC_ENT)
