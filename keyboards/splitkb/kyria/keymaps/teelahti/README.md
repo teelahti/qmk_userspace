@@ -12,11 +12,15 @@ Currently working flash commands are as follows:
 
 Home:
 
+Enable extra led pins from config.h. Then
+
 ```
 qmk flash -kb splitkb/kyria/rev3 -km teelahti -e CONVERT_TO=liatris
 ```
 
 Work:
+
+Disable extra led pins from config.h. Then
 
 ```
 qmk flash -kb splitkb/kyria/rev1 -km teelahti
