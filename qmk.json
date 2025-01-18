@@ -1,8 +1,9 @@
 {
-    "userspace_version": "1.0",
+    "userspace_version": "1.1",
     "build_targets": [
         ["splitkb/kyria/rev3", "teelahti"],
         ["kaly/kaly42", "teelahti"],
-        ["splitkb/kyria/rev1", "teelahti"]
+        ["splitkb/kyria/rev1", "teelahti"],
+        ["ploopyco/trackball_nano", "teelahti"]
     ]
 }

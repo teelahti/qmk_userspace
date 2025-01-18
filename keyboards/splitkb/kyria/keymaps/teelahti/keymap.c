@@ -11,22 +11,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Has some duplication since this keyboard has more thumb keys than some others I use.
  * Originally had a layer under backspace, but that caused too many mistakes so opted out of it.
  *
+ * Numlock is needed for trackball control.
+ *
  * ,-----------------------------------------.                              ,-----------------------------------------.
  * | ESC  |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  '   |
  * |------+------+------+------+------+------|                              |------+------+------+------+------+------|
  * | TAB  |   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  |   Ö  |  Ä   |
  * |------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+------|
- * | Med  |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  |   ,  |   .  |   -  | Lead |
+ * | Med  |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  |   ,  |   .  |   -  | m_l  |
  * `--------------------+------+------+------+------+------|  |------+------+------+------+------+--------------------'
- *                      |      |      |  Del | Space| Enter|  | Enter| Space| Bspc |      |      |
+ *                      | Numl |      |  Del | Space| Enter|  | Enter| Space| Bspc | Lead | m_r  |
  *                      |      |      |  Num | SNum | Nav  |  |  Ctl | Code |      |      |      |
  *                      `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
       KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                      KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
       KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                                      KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
-      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_LEAD,
-                               _______,_______,LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPC,   KC_BSPC, _______, _______
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_MOUSE_BUTTON_1,
+                               KC_NUM, _______,LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPC,   KC_BSPC, QK_LEAD,QK_MOUSE_BUTTON_2
     ),
 /*
  * Numpad layer, activated with LT_NUM
