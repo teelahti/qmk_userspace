@@ -32,6 +32,9 @@ void suspend_wakeup_init_user(void) {
 
 // Copied from:
 // https://github.com/t4corun/qmk_userspace/blob/main/keyboards/ploopyco/trackball_nano/keymaps/t4corun/keymap.c
+//
+// Flash with:
+//   qmk flash -kb ploopyco/trackball_nano -km teelahti
 static bool num_lock_state = false;
 static bool scroll_lock_state = false;
 
@@ -40,6 +43,23 @@ void keyboard_post_init_user(void) {
     scroll_lock_state  = host_keyboard_led_state().scroll_lock;
 }
 
+// React based on incoming led states. The methods we call to enable drag etc. are defined in
+// https://github.com/qmk/qmk_firmware/blob/master/keyboards/ploopyco/ploopyco.c
+//
+// Ability to set leds on MacOS is defined in:
+// https://www.reddit.com/r/ploopy/comments/ojvhru/led_trick_on_macos_making_nano_versatile_as/
+//
+// - scroll: setleds -name "Trackball*" ^scroll
+// - num:    setleds -name "Trackball*" ^num
+// - caps:   setleds -name "Trackball*" ^caps
+//
+// Setting all three puts the keyboard in boot loader state:
+//   setleds -name "Trackball*" -v +num +scroll +caps
+//
+// Setleds is blocked by MacOS sandbox, the program that calls it needs to be allowed at
+// Security & Privacy | Input control. Use MacOS console to see the TCC error messages if
+// doesn't work.
+// 
 bool led_update_user(led_t led_state) {
     // when scroll lock is pressed, toggle drag scroll state
     if ( scroll_lock_state != led_state.scroll_lock ) {
