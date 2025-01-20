@@ -35,6 +35,7 @@ void suspend_wakeup_init_user(void) {
 //
 // Flash with:
 //   qmk flash -kb ploopyco/trackball_nano -km teelahti
+// See comments below how to set the Ploopy nano in reset mode with led controls.
 static bool num_lock_state = false;
 static bool scroll_lock_state = false;
 
