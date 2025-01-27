@@ -57,9 +57,14 @@ void keyboard_post_init_user(void) {
 // Setting all three puts the keyboard in boot loader state:
 //   setleds -name "Trackball*" -v +num +scroll +caps
 //
+//
 // Setleds is blocked by MacOS sandbox, the program that calls it needs to be allowed at
 // Security & Privacy | Input control. Use MacOS console to see the TCC error messages if
 // doesn't work.
+//
+// NOTE: Since the day to day terminal (Wezterm) is installed by NixOS and changed often,
+// it might be easier to just open system terminal and run the above setleds there. System
+// terminal stays the same so the privacy allowance should hold better. 
 // 
 bool led_update_user(led_t led_state) {
     // when scroll lock is pressed, toggle drag scroll state
