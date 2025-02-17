@@ -27,7 +27,10 @@ enum custom_keycodes {
 // right hand home row
 #define HOME_J RSFT_T(KC_J)
 #define HOME_K RCTL_T(KC_K)
-#define HOME_L RALT_T(KC_L)
+// Recently switched this also to be left alt to better behave with Linux
+// Switch back if causes problems
+// #define HOME_L RALT_T(KC_L)
+#define HOME_L LALT_T(KC_L)
 #define HOME_OE RGUI_T(FI_ODIA)
 
 // Function shortcuts
