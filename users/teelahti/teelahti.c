@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 #include "print.h"
-#include "features/achordion.h"
 #include "keymap_finnish.h"
 #include "sendstring_finnish.h"
 #include "eeconfig.h"
@@ -41,12 +40,6 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // To further customize Achordion library that allows mods only on opposite hands see
-    // achordion_chord below.
-    if (!process_achordion(keycode, record)) {
-        return false;
-    }
-
     switch (keycode) {
         case NOTEQUAL:
             if (record->event.pressed) {
@@ -64,35 +57,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 };
 
-// Customize how the achordion add-on blocks keypresses on same side.
-//     https://getreuer.info/posts/keyboards/achordion/index.html
-// The default functionality is:
-// bool achordion_chord(uint16_t tap_hold_keycode,
-//                  keyrecord_t* tap_hold_record,
-//                  uint16_t other_keycode,
-//                  keyrecord_t* other_record) {
-//   return achordion_opposite_hands(tap_hold_record, other_record);
-// }
-bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, uint16_t other_keycode, keyrecord_t *other_record) {
-    // Exceptionally consider the following chords as holds, even though they
-    // are on the same hand. This is to allow my nav layer to work properly.
-    switch (tap_hold_keycode) {
-        case LT_NAV:
-            // On split keyboard the 0..MATRIX_ROWS/2 are on left side, and the rest on right.
-            // Allow anything on right hand side with our nav press.
-            if (other_record->event.key.row >= MATRIX_ROWS / 2) {
-                return true;
-            }
-            break;
-    }
-
-    // Otherwise, follow the opposite hands rule.
-    return achordion_opposite_hands(tap_hold_record, other_record);
-}
-
-void matrix_scan_user(void) {
-    achordion_task();
-}
 
 void leader_end_user(void) {
     if (leader_sequence_one_key(KC_C)) {

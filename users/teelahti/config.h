@@ -15,6 +15,9 @@
 // Use per key option to be able to disable permissive hold from home row modifiers
 #define PERMISSIVE_HOLD_PER_KEY
 
+// New replacement for Achordion library
+#define CHORDAL_HOLD
+
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
 
