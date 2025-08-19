@@ -6,8 +6,8 @@
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * Base Layer 1: QWERTY
- * 
+ * Base Layer: QWERTY
+ *
  * Has some duplication since this keyboard has more thumb keys than some others I use.
  * Originally had a layer under backspace, but that caused too many mistakes so opted out of it.
  *
@@ -29,6 +29,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                                      KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
       LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_MOUSE_BUTTON_1,
                                KC_F19, KC_F18, LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPC,   KC_BSPC, QK_LEAD,QK_MOUSE_BUTTON_2
+    ),
+/*
+ * Alternative base Layer for Linux 1: QWERTY
+ * Layers are changed with magic keys based on index: it is important that qwertys are 0 and 1.
+ * Changes:
+ *  - Space opens Linux version of code layer
+ */
+    [_QWERTY_LINUX] = LAYOUT(
+      KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                      KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+      KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                                      KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_MOUSE_BUTTON_1,
+                               KC_F19, KC_F18, LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPCL,  KC_BSPC, QK_LEAD,QK_MOUSE_BUTTON_2
     ),
 /*
  * Numpad layer, activated with LT_NUM
@@ -92,6 +104,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 /*
+ * Alternative coding layer for linux, entered with LT_SPCL
+ * Changes:
+ *  - Use default finnish keycodes from keymap_finnish.h
+ *
+ */
+    [_CODE_LINUX] = LAYOUT(
+      FI_GRV,  FI_LBRC, FI_RBRC, FI_PIPE, FI_BSLS, FI_ACUT,                                     _______, _______, _______, _______, _______, _______,
+      FI_TILD, FI_LCBR, FI_RCBR, FI_LPRN, FI_RPRN, FI_DQUO,                                     _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
+      FI_AT,   FI_LABK, FI_RABK, FI_EXLM, FI_EQL,  FI_CIRC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    ),
+/*
  * Navigation Layer, entered with Nav
  *
  * ,-----------------------------------------.                              ,-----------------------------------------.
@@ -135,7 +159,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Adjust Layer, entered with LT_ENT2
  *
  * ,-----------------------------------------.                              ,-----------------------------------------.
- * | Sleep|      |      |      |      |      |                              |      |      |      |      |      |      |
+ * | Sleep|      |      |      |  MAC | Linux|                              |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                              |------+------+------+------+------+------|
  * |      |      |      |      |      |      |                              |      |      |      |      |      |      |
  * |------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+------|
@@ -146,7 +170,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                      `----------------------------------'  `----------------------------------'
  */
     [_CTL] = LAYOUT(
-      KC_SLEP, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
+      KC_SLEP, _______, _______, _______,  PDF(0),  PDF(1),                                     _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, QK_BOOT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
@@ -267,7 +291,14 @@ static void render_status(void) {
     // Host Keyboard Layer Status
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            oled_write_P(PSTR("QWERTY\n\n"), false);
+            oled_write_P(PSTR("MAC\n\n"), false);
+            oled_write_P(PSTR("                  \n"), false);
+            oled_write_P(PSTR("                  \n"), false);
+            oled_write_P(PSTR("                  \n"), false);
+            oled_write_P(PSTR("                  \n"), false);
+            break;
+        case _QWERTY_LINUX:
+            oled_write_P(PSTR("LINUX\n\n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
@@ -296,6 +327,13 @@ static void render_status(void) {
             break;
         case _CODE:
             oled_write_P(PSTR("Code MAC:\n\n"), false);
+            oled_write_P(PSTR("` [ ] | \\ ´\n"), false);
+            oled_write_P(PSTR("~ { } ( ) \"\n"), false);
+            oled_write_P(PSTR("@ < > ! = ^\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            break;
+        case _CODE_LINUX:
+            oled_write_P(PSTR("Code LINUX:\n\n"), false);
             oled_write_P(PSTR("` [ ] | \\ ´\n"), false);
             oled_write_P(PSTR("~ { } ( ) \"\n"), false);
             oled_write_P(PSTR("@ < > ! = ^\n"), false);

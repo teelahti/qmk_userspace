@@ -5,12 +5,14 @@
 
 enum layers {
     _QWERTY,
+    _QWERTY_LINUX,
     _NUM,
     _SNUM,
     _FNUM,
     _NAV,
     _MEDIA,
     _CODE,
+    _CODE_LINUX,
     _CTL
 };
 
@@ -44,6 +46,7 @@ enum custom_keycodes {
 #define LT_ENT LT(_NAV,KC_ENT)
 #define LT_ENT2 LT(_CTL,KC_ENT)
 #define LT_SPC LT(_CODE,KC_SPC)
+#define LT_SPCL LT(_CODE_LINUX,KC_SPC)
 #define LT_SPC2 LT(_SNUM,KC_SPC)
 #define LT_DEL LT(_FNUM,KC_DEL)
 #define LT_NUM LT(_NUM,KC_DEL)
