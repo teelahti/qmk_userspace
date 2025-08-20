@@ -289,16 +289,20 @@ static void render_signature(void) {
 
 static void render_status(void) {
     // Host Keyboard Layer Status
-    switch (get_highest_layer(layer_state)) {
+    // If we didn't do any changes to default layer, i.e. no PDF() above, we
+    // could just use 'get_hightest_layer(layer_state)'. Based on this article:
+    //   https://www.reddit.com/r/olkb/comments/o5924u/get_heighest_layer_and_default_layer_change/
+    // we can use 'layer_state|default_layer_state' to catch the swapped layer.
+    switch (get_highest_layer(layer_state|default_layer_state)) {
         case _QWERTY:
-            oled_write_P(PSTR("MAC\n\n"), false);
+            oled_write_P(PSTR("QWERTY MAC\n\n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
             break;
         case _QWERTY_LINUX:
-            oled_write_P(PSTR("LINUX\n\n"), false);
+            oled_write_P(PSTR("QWERTY LINUX\n\n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
             oled_write_P(PSTR("                  \n"), false);
@@ -326,14 +330,8 @@ static void render_status(void) {
             oled_write_P(PSTR("\n"), false);
             break;
         case _CODE:
-            oled_write_P(PSTR("Code MAC:\n\n"), false);
-            oled_write_P(PSTR("` [ ] | \\ ´\n"), false);
-            oled_write_P(PSTR("~ { } ( ) \"\n"), false);
-            oled_write_P(PSTR("@ < > ! = ^\n"), false);
-            oled_write_P(PSTR("\n"), false);
-            break;
         case _CODE_LINUX:
-            oled_write_P(PSTR("Code LINUX:\n\n"), false);
+            oled_write_P(PSTR("Code:\n\n"), false);
             oled_write_P(PSTR("` [ ] | \\ ´\n"), false);
             oled_write_P(PSTR("~ { } ( ) \"\n"), false);
             oled_write_P(PSTR("@ < > ! = ^\n"), false);
@@ -348,10 +346,10 @@ static void render_status(void) {
             break;
         case _CTL:
             oled_write_P(PSTR("Adjust:\n\n"), false);
-            oled_write_P(PSTR("\n"), false);
-            oled_write_P(PSTR("\n"), false);
-            oled_write_P(PSTR("                 RES\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_P(PSTR("          MAC LIN\n"), false);
+            oled_write_P(PSTR("                 \n"), false);
+            oled_write_P(PSTR("              RES\n"), false);
+            oled_write_P(PSTR("                 \n"), false);
             break;
         default:
             oled_write_P(PSTR("Undefined\n"), false);
