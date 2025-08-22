@@ -27,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT(
       KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                      KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
       KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                                      KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
-      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_MOUSE_BUTTON_1,
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  FI_MINS, QK_MOUSE_BUTTON_1,
                                KC_F19, KC_F18, LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPC,   KC_BSPC, QK_LEAD,QK_MOUSE_BUTTON_2
     ),
 /*
@@ -39,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY_LINUX] = LAYOUT(
       KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                                      KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
       KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                                      KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
-      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_MOUSE_BUTTON_1,
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   LT_NAV, KC_DEL, QK_LEAD, KC_BSPC,  KC_N,   KC_M,    KC_COMM, KC_DOT,  FI_MINS, QK_MOUSE_BUTTON_1,
                                KC_F19, KC_F18, LT_NUM, LT_SPC2,LT_ENT, LT_ENT2, LT_SPCL,  KC_BSPC, QK_LEAD,QK_MOUSE_BUTTON_2
     ),
 /*
@@ -121,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                              ,-----------------------------------------.
  * |      |      |      |      |      |      |                              | Home | PgDn | PgUp | End  |      |      |
  * |------+------+------+------+------+------|                              |------+------+------+------+------+------|
- * |      | GUI  | Alt  | Ctl  | Shift|      |                              | Left | Down |  Up  | Right|      |CapsLk|
+ * |      | GUI  | Alt  | Ctl  | Shift|      |                              | Left | Down |  Up  | Right|CapsWr|CapsLk|
  * |------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |  |      |      | RDelW| Ctl- | Ctl+ | DelW |      |      |
  * `--------------------+------+------+------+------+------|  |------+------+------+------+------+--------------------'
@@ -131,7 +131,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_NAV] = LAYOUT(
       _______, _______, _______, _______, _______, _______,                                     KC_HOME, KC_PGDN,  KC_PGUP, KC_END,  _______, _______,
-      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, _______, KC_CAPS,
+      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, CW_TOGG, KC_CAPS,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RDELWRD, CMIN,     CPLUS,   DELWRD,  _______, _______,
                                  _______, _______, _______, _______, _______, _______, KC_DEL,  _______,  _______, _______
     ),

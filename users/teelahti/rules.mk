@@ -1,3 +1,4 @@
-LEADER_ENABLE = yes        # Enable the Leader Key feature
+LEADER_ENABLE = yes
+CAPS_WORD_ENABLE = yes
 
 SRC += teelahti.c
