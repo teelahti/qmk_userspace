@@ -59,8 +59,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NUM] = LAYOUT(
       _______, _______, _______, _______, _______, _______,                                     FI_ASTR, KC_7,    KC_8,    KC_9, FI_PLUS, FI_ARNG,
       _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     FI_SLSH, KC_4,    KC_5,    KC_6, FI_MINS, _______,
-      _______, _______, _______, KC_VOLD, KC_MUTE, _______, _______, _______, _______, _______, FI_EQL,  KC_1,    KC_2,    KC_3, FI_COMM,  FI_DOT,
-                                 _______, KC_MRWD, _______, KC_MFFD, KC_MPLY, _______, _______, KC_0,   _______,  _______
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, FI_EQL,  KC_1,    KC_2,    KC_3, FI_COMM,  FI_DOT,
+                                 _______, _______, _______, _______, _______, _______, _______, KC_0,   _______,  _______
     ),
 /*
  * Shifted numbers, activated with LT_SPC2
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SNUM] = LAYOUT(
       _______, _______, _______, _______, _______, _______,                                     _______, FI_SLSH, FI_LPRN, FI_RPRN, FI_QUES, FI_DIAE,
       _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     _______, FI_CURR, FI_PERC, FI_AMPR, FI_UNDS, _______,
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, NOTEQUAL,FI_EXLM, FI_DQUO, FI_HASH,FI_SCLN ,FI_COLN,
+      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, NOTEQUAL,FI_EXLM, FI_DQUO, FI_HASH, FI_SCLN ,FI_COLN,
                                  _______, _______, _______, _______, _______, _______, _______, FI_EQL , _______, _______
     ),
 
