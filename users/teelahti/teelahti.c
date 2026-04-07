@@ -11,7 +11,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         // Reduce the amount of accidental Enter and Space key hits when using those keys
         // as layer change
         case LT_ENT:
+        case LT_ENT2:
         case LT_SPC:
+        case LT_SPCL:
+        case LT_SPC2:
             return TAPPING_TERM - 40;
 
         // Shift is used frequently and quickly. A shorter tapping term makes shift
