@@ -180,3 +180,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // clang-format on
 
+// Try to help with the slave side not booting correctly after KVM switch
+void keyboard_pre_init_user(void) {
+    wait_ms(1000);
+}

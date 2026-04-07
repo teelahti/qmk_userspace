@@ -13,11 +13,14 @@
 // chords resolve faster (on key release instead of waiting for tapping term).
 // These two are designed to be used together per QMK docs.
 #define CHORDAL_HOLD
-#define PERMISSIVE_HOLD
+// #define PERMISSIVE_HOLD
+// #define PERMISSIVE_HOLD_PER_KEY
+// Newer alternative for permissive hold:
+#define HOLD_ON_OTHER_KEY_PRESS
 
 // Disable hold behavior during fast typing flow. Reduces input lag for home row
 // mods when typing quickly. 150ms is the recommended starting point.
-#define FLOW_TAP_TERM 150
+#define FLOW_TAP_TERM 120
 
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350

@@ -18,14 +18,14 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         // activate more eagerly, reducing missed shifts during fast typing.
         case HOME_J:
         case HOME_F:
-            return TAPPING_TERM - 70;
+            return TAPPING_TERM - 100;
 
         default:
             return TAPPING_TERM;
     }
 }
 
-// Disabled when permissive hold was taken into use
+// Disabled with chordal hold
 // bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 //     switch (keycode) {
 //         // Enable permissive hold for shift, but keep it disabled for all other keys
