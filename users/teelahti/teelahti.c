@@ -29,16 +29,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Disabled with chordal hold
-// bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         // Enable permissive hold for shift, but keep it disabled for all other keys
-//         case HOME_F:
-//         case HOME_J:
-//             return true;
-//         default:
-//             return false;
-//     }
-// }
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        // Enable permissive hold for shift, but keep it disabled for all other keys
+        case HOME_F:
+        case HOME_J:
+            return true;
+        default:
+            return false;
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
