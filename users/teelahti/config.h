@@ -13,7 +13,8 @@
 // #define PERMISSIVE_HOLD
 // #undef PERMISSIVE_HOLD
 // Use per key option to be able to disable permissive hold from home row modifiers
-#define PERMISSIVE_HOLD_PER_KEY
+// Disabled when Chordal hold was taken into use. Might need to re-enable.
+// #define PERMISSIVE_HOLD_PER_KEY
 
 // New replacement for Achordion library
 #define CHORDAL_HOLD
