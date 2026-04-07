@@ -5,7 +5,6 @@
 #include "eeconfig.h"
 #include "teelahti.h"
 
-
 // Per key tapping term settings
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -15,10 +14,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case LT_SPC:
             return TAPPING_TERM - 40;
 
-        // Using shift is usually fast, reduce tap term for them to avoid getting
-        // individual keys instead of shift + key. This is needed, since when
-        // IGNORE_MOD_TAP_INTERRUPT is on, both keys, modifier and another key, need to be held
-        // at least for TAPPING_TERM for the modified symbol to appear.
+        // Shift is used frequently and quickly. A shorter tapping term makes shift
+        // activate more eagerly, reducing missed shifts during fast typing.
         case HOME_J:
         case HOME_F:
             return TAPPING_TERM - 70;
@@ -58,7 +55,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 };
 
-
 void leader_end_user(void) {
     if (leader_sequence_one_key(KC_C)) {
         // Inline code
@@ -92,7 +88,7 @@ bool caps_word_press_user(uint16_t keycode) {
         case FI_ARNG:
         case KC_MINS:
         case FI_MINS:
-            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
+            add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
             return true;
 
         // Keycodes that continue Caps Word, without shifting.
@@ -104,7 +100,6 @@ bool caps_word_press_user(uint16_t keycode) {
             return true;
 
         default:
-            return false;  // Deactivate Caps Word.
+            return false; // Deactivate Caps Word.
     }
 }
-

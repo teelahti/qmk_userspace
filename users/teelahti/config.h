@@ -9,19 +9,18 @@
 // setting. 0 = never repeat, which is the same than old behavior
 #define QUICK_TAP_TERM 0
 
-// This prevents short hold periods to be interpreted as individual taps when typing quickly.
-// #define PERMISSIVE_HOLD
-// #undef PERMISSIVE_HOLD
-// Use per key option to be able to disable permissive hold from home row modifiers
-// Disabled when Chordal hold was taken into use. Might need to re-enable.
-// #define PERMISSIVE_HOLD_PER_KEY
-
-// New replacement for Achordion library
+// Chordal hold prevents same-hand misfires. Permissive hold makes opposite-hand
+// chords resolve faster (on key release instead of waiting for tapping term).
+// These two are designed to be used together per QMK docs.
 #define CHORDAL_HOLD
+#define PERMISSIVE_HOLD
+
+// Disable hold behavior during fast typing flow. Reduces input lag for home row
+// mods when typing quickly. 150ms is the recommended starting point.
+#define FLOW_TAP_TERM 150
 
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
 
 // Recommended for heavy chording.
 #define QMK_KEYS_PER_SCAN 4
-
