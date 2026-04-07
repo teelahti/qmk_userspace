@@ -15,7 +15,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case LT_SPC:
         case LT_SPCL:
         case LT_SPC2:
-            return TAPPING_TERM - 40;
+            return TAPPING_TERM - 80;
 
         // Shift is used frequently and quickly. A shorter tapping term makes shift
         // activate more eagerly, reducing missed shifts during fast typing.
