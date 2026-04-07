@@ -14,9 +14,11 @@
 // These two are designed to be used together per QMK docs.
 #define CHORDAL_HOLD
 // #define PERMISSIVE_HOLD
-// #define PERMISSIVE_HOLD_PER_KEY
-// Newer alternative for permissive hold:
-#define HOLD_ON_OTHER_KEY_PRESS
+#define PERMISSIVE_HOLD_PER_KEY
+// Newer alternative for permissive hold, but it seems this causes problems
+// with alt-key based tiling window management; this chooses the hold action too
+// easily:
+// #define HOLD_ON_OTHER_KEY_PRESS
 
 // Disable hold behavior during fast typing flow. Reduces input lag for home row
 // mods when typing quickly. 150ms is the recommended starting point.
