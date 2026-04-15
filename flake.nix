@@ -22,6 +22,7 @@
             buildInputs = [
               qmk
               gnumake
+              dos2unix
             ];
           };
       }
