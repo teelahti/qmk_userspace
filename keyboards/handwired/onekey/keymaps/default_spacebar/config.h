@@ -8,6 +8,6 @@
 #define DIRECT_PINS \
     {               \
         {           \
-            GP26    \
+            GP27    \
         }           \
     }
