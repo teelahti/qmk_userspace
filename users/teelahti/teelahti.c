@@ -50,6 +50,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 // when keycode NOTEQUAL is released
             }
             break;
+        case MY_EURO:
+            if (record->event.pressed) {
+                // Clear modifiers to prevent any held home row mods
+                // from contaminating the key combo, then restore.
+                uint8_t mods = get_mods();
+                clear_mods();
+                clear_weak_mods();
+                if (get_highest_layer(default_layer_state) == _QWERTY) {
+                    tap_code16(FI_CURR);   // macOS Finnish: Shift+4 = €
+                } else {
+                    tap_code16(ALGR(KC_E));   // Linux Finnish (kotoistus): AltGr+E = €
+                }
+                set_mods(mods);
+            }
+            return false;
     }
         // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE

@@ -18,6 +18,7 @@ enum layers {
 
 enum custom_keycodes {
     NOTEQUAL = SAFE_RANGE,
+    MY_EURO,
 };
 
 // Left hand home row

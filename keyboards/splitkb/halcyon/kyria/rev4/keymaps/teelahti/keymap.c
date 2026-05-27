@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_SNUM] = LAYOUT(
       _______, _______, _______, _______, _______, _______,                                     _______, FI_SLSH, FI_LPRN, FI_RPRN, FI_QUES, FI_DIAE,
-      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     FI_DLR , FI_CURR, FI_PERC, FI_AMPR, FI_UNDS, _______,
+      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     FI_DLR , MY_EURO, FI_PERC, FI_AMPR, FI_UNDS, _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, NOTEQUAL,FI_EXLM, FI_DQUO, FI_HASH, FI_SCLN ,FI_COLN,
                                  _______, _______, _______, _______, _______, _______, _______, FI_EQL , _______, _______
     ),
