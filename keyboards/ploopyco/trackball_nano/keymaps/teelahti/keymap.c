@@ -70,6 +70,17 @@ bool led_update_user(led_t led_state) {
     // when scroll lock is pressed, toggle drag scroll state
     if ( scroll_lock_state != led_state.scroll_lock ) {
         toggle_drag_scroll();
+
+        // Decouple scroll sensitivity from cursor DPI: run the sensor at a low,
+        // dedicated CPI while scrolling so the small DRAGSCROLL_DIVISOR gives an
+        // instant first tick (no dead zone) without scrolling too fast. Restore
+        // the selected cursor DPI when leaving scroll mode.
+        if ( led_state.scroll_lock ) {
+            pointing_device_set_cpi(PLOOPY_DRAGSCROLL_DPI);
+        } else {
+            pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]);
+        }
+
         scroll_lock_state = led_state.scroll_lock;
     }
 
