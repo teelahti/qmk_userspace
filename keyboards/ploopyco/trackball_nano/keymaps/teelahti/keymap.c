@@ -21,15 +21,6 @@
 // Dummy
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {{{ KC_NO }}};
 
-void suspend_power_down_user(void) {
-    // Switch off sensor + LED making trackball unable to wake host
-    adns5050_power_down();
-}
-
-void suspend_wakeup_init_user(void) {
-    adns5050_init();
-}
-
 // Copied from:
 // https://github.com/t4corun/qmk_userspace/blob/main/keyboards/ploopyco/trackball_nano/keymaps/t4corun/keymap.c
 //
@@ -44,8 +35,8 @@ static bool scroll_lock_state = false;
 // the whole integer part of the accumulated delta, so rolling the ball fast sends
 // multi-detent reports that the host accelerates further, making the view jump many
 // rows at once. Instead we convert here in pointing_device_task_user() and emit
-// high resolution scroll units strictly proportional to ball travel - no rate limit
-// and no acceleration, just a fixed gain, like a trackpad.
+// detents strictly proportional to ball travel - no rate limit and no acceleration,
+// just a fixed gain, like a trackpad.
 //
 // Note on ordering: pointing_device_task_kb() calls pointing_device_task_user()
 // first and only then applies its own drag-scroll conversion. Since we never turn
@@ -73,6 +64,49 @@ static uint16_t      last_scroll_move = 0;
 void keyboard_post_init_user(void) {
     num_lock_state  = host_keyboard_led_state().num_lock;
     scroll_lock_state  = host_keyboard_led_state().scroll_lock;
+}
+
+// Push the CPI the current mode wants down to the sensor. Scroll mode runs at its
+// own dedicated CPI so scroll feel does not change when cycling cursor DPI.
+static void apply_current_cpi(void) {
+    pointing_device_set_cpi(scroll_mode ? TEE_SCROLL_DPI : dpi_array[keyboard_config.dpi_config]);
+}
+
+// Number of entries in PLOOPY_DPI_OPTIONS. The core's own DPI_OPTION_SIZE is
+// private to ploopyco.c. sizeof on a compound literal needs no storage.
+#define TEE_DPI_OPTION_COUNT (sizeof((uint16_t[])PLOOPY_DPI_OPTIONS) / sizeof(uint16_t))
+
+void pointing_device_init_user(void) {
+    // Runs immediately after pointing_device_init_kb(), which guards the DPI index
+    // stored in EEPROM with:
+    //
+    //     if (keyboard_config.dpi_config > DPI_OPTION_SIZE)
+    //
+    // That is off by one - an index of exactly DPI_OPTION_SIZE passes the check and
+    // is then used to read dpi_array out of bounds. A stale index left in EEPROM by
+    // an older, longer PLOOPY_DPI_OPTIONS list therefore boots the sensor at whatever
+    // happens to follow the array, which survives reflashing because EEPROM does.
+    // Clamp it and write the corrected value back.
+    if (keyboard_config.dpi_config >= TEE_DPI_OPTION_COUNT) {
+        keyboard_config.dpi_config = PLOOPY_DPI_DEFAULT;
+        eeconfig_update_kb(keyboard_config.raw);
+        apply_current_cpi();
+    }
+}
+
+void suspend_power_down_user(void) {
+    // Switch off sensor + LED making trackball unable to wake host
+    adns5050_power_down();
+}
+
+void suspend_wakeup_init_user(void) {
+    adns5050_init();
+
+    // adns5050_init() writes REG_CHIP_RESET, which clears the sensor's resolution
+    // register back to its power-on default, and nothing else puts it back. Without
+    // this the ball runs at the sensor default after every wake from sleep until the
+    // DPI key is pressed, which is what re-applies it via cycle_dpi().
+    apply_current_cpi();
 }
 
 static void reset_scroll_state(void) {
@@ -185,14 +219,10 @@ bool led_update_user(led_t led_state) {
         // first scroll units right after toggling.
         reset_scroll_state();
 
-        // Decouple scroll sensitivity from cursor DPI: run the sensor at a low,
-        // dedicated CPI while scrolling, and restore the selected cursor DPI when
-        // leaving scroll mode. Normal (non-scroll) pointer behaviour is unchanged.
-        if ( scroll_mode ) {
-            pointing_device_set_cpi(TEE_SCROLL_DPI);
-        } else {
-            pointing_device_set_cpi(dpi_array[keyboard_config.dpi_config]);
-        }
+        // Run the sensor at the dedicated scroll CPI while scrolling, and restore
+        // the selected cursor DPI when leaving. Normal (non-scroll) pointer
+        // behaviour is unchanged.
+        apply_current_cpi();
 
         scroll_lock_state = led_state.scroll_lock;
     }

@@ -55,5 +55,20 @@
 // Natural (inverted) vertical scrolling, matching the old PLOOPY_DRAGSCROLL_INVERT.
 #define TEE_SCROLL_INVERT_V
 
-#define PLOOPY_DPI_OPTIONS { 1200, 1400, 1800 }
-#define PLOOPY_DPI_DEFAULT 1
+// Cursor DPI options. Every value MUST be a multiple of 125 and no higher than
+// 1375, because adns5050_set_cpi() does constrain(cpi / 125, 1, 13):
+//
+//   - the division is integer, so anything else silently rounds DOWN
+//   - the sensor's own resolution table in drivers/sensors/adns5050.h stops at
+//     CPI1375 = 0x1b, so the constrain() ceiling of 13 happily writes 1500 and 1625,
+//     which are past the end of that table and leave the sensor in an undefined
+//     resolution - it does not track anywhere near the requested speed
+//
+// The previous { 1200, 1400, 1800 } therefore really meant { 1125, 1375, undefined },
+// which is why the ball felt wrong after a flash whenever the stored index was 2.
+// 1375 is the sensor's hardware maximum; there is no faster setting to be had.
+#define PLOOPY_DPI_OPTIONS { 1000, 1250, 1375 }
+
+// Index 2 (1375) keeps the boot speed identical to what { 1200, 1400, 1800 } gave
+// at its default index 1, which also resolved to 1375.
+#define PLOOPY_DPI_DEFAULT 2
