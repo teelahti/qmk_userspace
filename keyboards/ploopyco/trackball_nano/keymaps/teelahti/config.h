@@ -21,9 +21,9 @@
 // Sensor CPI while scrolling. Decoupled from the cursor DPI options so scroll feel
 // does not change when cycling DPI. Applied on scroll toggle in keymap.c.
 //
-// Must be a multiple of 125: adns5050_set_cpi() does constrain(cpi / 125, 1, 13),
-// so anything else is silently rounded down (600 actually ran at 500) and 1625 is
-// the ceiling. Do not tune speed with this - it is the same knob as GAIN_DEN below
+// Must be a multiple of 125 and no higher than 1375 - see the PLOOPY_DPI_OPTIONS
+// note at the bottom for why. Anything else is silently rounded down (600 actually
+// ran at 500). Do not tune speed with this: it is the same knob as GAIN_DEN below
 // (speed is CPI/DEN) but quantised to 125-count steps. Keep it fixed, tune DEN.
 #define TEE_SCROLL_DPI 625
 
@@ -38,6 +38,24 @@
 //     DEN  80 -> 7.8 detents/in  (~23 lines/in)  faster
 #define TEE_SCROLL_GAIN_NUM 1
 #define TEE_SCROLL_GAIN_DEN 125
+
+// HOST-SIDE SMOOTHING (macOS): Mac Mouse Fix.
+//
+// One detent is the finest increment macOS will take from a wheel device, so on a
+// bare system this scrolls in ~3 line steps however fine the gain above is. Mac
+// Mouse Fix (macmousefix.com) closes that gap - it intercepts the HID events and
+// re-posts them as pixel-unit scroll events, the same units a trackpad produces,
+// which is the only way to get sub-line scrolling on macOS. That is what turns this
+// from stepped into smooth, and it is doing the work no firmware setting can.
+//
+// Use its "Regular Smoothness" mode. "High Smoothness" adds momentum and bounce,
+// which reintroduces the speed-dependent scroll distance that the fixed gain above
+// exists to eliminate.
+//
+// Nothing here depends on it. The firmware still decides how far one detent is
+// worth, so DEN stays the speed knob and Mac Mouse Fix only smooths what we emit;
+// without it, or on another machine, scrolling degrades to whole-detent steps at
+// the same speed rather than breaking.
 
 // Snap scrolling to one axis at a time. Programs that smooth their own scrolling
 // tend to go slow or jittery when fed vertical and horizontal wheel input at once,
