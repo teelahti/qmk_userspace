@@ -1,14 +1,59 @@
 #pragma once
 
-#define PLOOPY_DRAGSCROLL_INVERT
-#define PLOOPY_DRAGSCROLL_DIVISOR_H 40.0
-#define PLOOPY_DRAGSCROLL_DIVISOR_V 40.0
+// Scroll mode is implemented in keymap.c (pointing_device_task_user), not by the
+// core drag-scroll code in keyboards/ploopyco/ploopyco.c. The core divides the raw
+// delta and emits the whole integer part, so a fast ball roll sends multi-tick
+// reports (v=3, v=5, ...) which the host then accelerates on top -> sudden jumps.
+//
+// Instead we emit scroll strictly proportional to ball travel, with the fractional
+// part carried between reports - no rate limit and no acceleration, just a gain.
+//
+// Deliberately NOT using POINTING_DEVICE_HIRES_SCROLL_ENABLE. It advertises a
+// resolution multiplier so the host can treat each unit as 1/120 of a detent, but
+// macOS never writes the required feature report - IOHIDFamily does not implement
+// it for generic HID mice (it is a Microsoft-originated mechanism; Windows and
+// Linux honour it). Verified on this machine: the device gets the generic
+// HIDScrollResolution of 9.0 while the built-in trackpad gets 400.0. With hi-res
+// enabled, macOS therefore reads every unit as a full detent and scrolls 120x too
+// fast, so the same firmware would behave completely differently per host.
+// One whole detent is the finest increment macOS will take from a wheel device.
 
-// Custom (keymap-only) macro: dedicated sensor CPI while drag-scroll is active.
-// Core firmware ignores this; keymap.c applies it on scroll toggle. Running a low
-// CPI during scroll keeps the speed comfortable while the small divisor above
-// removes the initial pickup dead zone (instant first tick).
-#define PLOOPY_DRAGSCROLL_DPI 600
+// Sensor CPI while scrolling. Decoupled from the cursor DPI options so scroll feel
+// does not change when cycling DPI. Applied on scroll toggle in keymap.c.
+//
+// Must be a multiple of 125: adns5050_set_cpi() does constrain(cpi / 125, 1, 13),
+// so anything else is silently rounded down (600 actually ran at 500) and 1625 is
+// the ceiling. Do not tune speed with this - it is the same knob as GAIN_DEN below
+// (speed is CPI/DEN) but quantised to 125-count steps. Keep it fixed, tune DEN.
+#define TEE_SCROLL_DPI 625
+
+// THE SPEED KNOB. Detents emitted per sensor count, as NUM/DEN. Fractions are exact
+// - the remainder carries to the next report. LOWER DEN = FASTER.
+//
+// DEN is the ball travel in sensor counts per detent, so speed is:
+//     TEE_SCROLL_DPI / DEN  detents per inch of ball travel
+// and macOS turns each detent into ~3 lines. At 625 CPI:
+//     DEN 200 -> 3.1 detents/in  (~9 lines/in)   slower
+//     DEN 125 -> 5.0 detents/in  (~15 lines/in)
+//     DEN  80 -> 7.8 detents/in  (~23 lines/in)  faster
+#define TEE_SCROLL_GAIN_NUM 1
+#define TEE_SCROLL_GAIN_DEN 125
+
+// Snap scrolling to one axis at a time. Programs that smooth their own scrolling
+// tend to go slow or jittery when fed vertical and horizontal wheel input at once,
+// which is easy to do with a ball. Comment out to allow free diagonal scrolling.
+#define TEE_SCROLL_AXIS_SNAP
+
+// Ball travel (sensor counts) after which the chosen axis is locked in. Below this
+// the dominant axis is re-evaluated every report, so there is no dead zone at the
+// start of a scroll - only a brief window where the direction can still settle.
+#define TEE_SCROLL_AXIS_LOCK_COUNTS 20
+
+// Idle time that releases the axis lock, so the next scroll can pick a new axis.
+#define TEE_SCROLL_AXIS_UNLOCK_MS 150
+
+// Natural (inverted) vertical scrolling, matching the old PLOOPY_DRAGSCROLL_INVERT.
+#define TEE_SCROLL_INVERT_V
 
 #define PLOOPY_DPI_OPTIONS { 1200, 1400, 1800 }
 #define PLOOPY_DPI_DEFAULT 1
