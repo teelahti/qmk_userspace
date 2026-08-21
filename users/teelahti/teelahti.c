@@ -28,7 +28,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-// Disabled with chordal hold
+// Used alongside chordal hold: permissive hold is enabled per key below,
+// not globally, so only the shift keys get the faster resolution.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         // Enable permissive hold for shift, but keep it disabled for all other keys
@@ -44,10 +45,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case NOTEQUAL:
             if (record->event.pressed) {
-                // when keycode NOTEQUAL is pressed
                 SEND_STRING("!=");
-            } else {
-                // when keycode NOTEQUAL is released
             }
             break;
         case MY_EURO:

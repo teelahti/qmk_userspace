@@ -5,7 +5,7 @@ accordingly. Default is usually the newest and it will flash correctly but not
 work. E.g. to flash `rev1` do `qmk flash -kb splitkb/kyria/rev1 -km teelahti` or
 `make splitkb/kyria/rev1:teelahti`.
 
-For RP2040 based boards the option we need to convert with QMK option `-e CONVERT_TO=liatris`. This could e defined in RULES.mk, too.
+For RP2040 based boards the option we need to convert with QMK option `-e CONVERT_TO=liatris`. This could be defined in rules.mk, too.
 
 Currently working flash commands are as follows:
 

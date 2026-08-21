@@ -8,7 +8,6 @@ enum layers {
     _QWERTY_LINUX,
     _NUM,
     _SNUM,
-    _FNUM,
     _NAV,
     _MEDIA,
     _CODE,
@@ -39,7 +38,6 @@ enum custom_keycodes {
 // Function shortcuts
 #define DELWRD RALT(KC_DEL)
 #define RDELWRD RALT(KC_BSPC)
-#define SF12 LSFT(KC_F12)    // SHIFT + F12
 #define CMIN LCTL(FI_MINS)   // CTRL + -
 #define CPLUS LCTL(FI_PLUS)  // CTRL + +
 
@@ -49,7 +47,6 @@ enum custom_keycodes {
 #define LT_SPC LT(_CODE,KC_SPC)
 #define LT_SPCL LT(_CODE_LINUX,KC_SPC)
 #define LT_SPC2 LT(_SNUM,KC_SPC)
-#define LT_DEL LT(_FNUM,KC_DEL)
 #define LT_NUM LT(_NUM,KC_DEL)
 #define LT_NAV LT(_NAV,KC_BSPC)
 #define LT_MED MO(_MEDIA)

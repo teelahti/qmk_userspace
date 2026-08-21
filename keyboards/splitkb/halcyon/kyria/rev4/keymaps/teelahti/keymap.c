@@ -11,7 +11,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Has some duplication since this keyboard has more thumb keys than some others I use.
  * Originally had a layer under backspace, but that caused too many mistakes so opted out of it.
  *
- * F-keys are needed needed for trackball control.
+ * F-keys are needed for trackball control.
  *
  * ,-----------------------------------------.                              ,-----------------------------------------.
  * | ESC  |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  '   |
