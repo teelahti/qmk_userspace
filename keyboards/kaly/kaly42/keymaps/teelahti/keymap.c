@@ -11,7 +11,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
   *                    │Esc │ Q   │ W   │ E   │ R   │ T   │           │ Y   │ U   │ I   │ O   │ P   │ '   │
   *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
-  *                    │Tab │ A   │ S   │ D   │ F   │ G   │           │ H   │ J   │ K   │ L   │ ;   │ Ä   │
+  *                    │Tab │ A   │ S   │ D   │ F   │ G   │           │ H   │ J   │ K   │ L   │ Ö   │ Ä   │
   *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
   *                    │Med │ Z   │ X   │ C   │ V   │ B   │           │ N   │ M   │ ,   │ .   │ -   │Lead │
   *                    └────┴─────┴─────┴─────┴─────┴─────┘           └─────┴─────┴─────┴─────┴─────┴─────┘
@@ -26,8 +26,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT_split_3x6_3(
       KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                       KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
       KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                       KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
-      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,                       KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, QK_LEAD,
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,                       KC_N,   KC_M,    KC_COMM, KC_DOT,  FI_MINS, QK_LEAD,
                                       LT_NUM,  LT_SPC2, LT_ENT,   LT_ENT2, LT_SPC, KC_BSPC
+    ),
+/*
+ * Alternative base Layer for Linux 1: QWERTY
+ * Layers are changed with magic keys based on index: it is important that qwertys are 0 and 1.
+ * Changes:
+ *  - Space opens Linux version of code layer
+ */
+    [_QWERTY_LINUX] = LAYOUT_split_3x6_3(
+      KC_ESC,  KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,                       KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+      KC_TAB,  HOME_A, HOME_S, HOME_D, HOME_F, KC_G,                       KC_H,   HOME_J,  HOME_K,  HOME_L,  HOME_OE, FI_ADIA,
+      LT_MED,  KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,                       KC_N,   KC_M,    KC_COMM, KC_DOT,  FI_MINS, QK_LEAD,
+                                      LT_NUM,  LT_SPC2, LT_ENT,   LT_ENT2, LT_SPCL,KC_BSPC
     ),
 /*
  * Numpad layer, activated with LT_NUM
@@ -36,12 +48,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
  *                    │    │     │     │     │     │     │           │  *  │ 7/  │ 8(  │ 9)  │  +  │  å  │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
- *                    │    │ GUI │ Alt │ Ctl │ Sft │     │           │  /  │ 2€  │ 5%  │ 6&  │  -  │     │
+ *                    │    │ GUI │ Alt │ Ctl │ Sft │     │           │  /  │ 4€  │ 5%  │ 6&  │  -  │     │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
  *                    │    │     │     │     │     │     │           │  =  │ 1!  │ 2"  │ 3#  │  ,  │  .  │
  *                    └────┴─────┴─────┴─────┴─────┴─────┘           └─────┴─────┴─────┴─────┴─────┴─────┘
  *                                            ┌────┐                       ┌────┐
- *                                            │Num │                       │    │
+ *                                            │Num │                       │ 0  │
  *                                            │    ├────┐             ┌────┤    │
  *                                            └────┤    ├────┐   ┌────┤    ├────┘
  *                                                 │    │    │   │    │    │
@@ -58,14 +70,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Shifted numbers, activated with LT_SPC2
  *
  *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
- *                    │    │     │     │     │     │     │           │     │  /  │  (  │  )  │  ?  │  å  │
+ *                    │    │     │     │     │     │     │           │     │  /  │  (  │  )  │  ?  │  ¨  │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
- *                    │    │ GUI │ Alt │ Ctl │ Sft │     │           │     │  €  │  %  │  &  │  _  │     │
+ *                    │    │ GUI │ Alt │ Ctl │ Sft │     │           │  $  │  €  │  %  │  &  │  _  │     │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
  *                    │    │     │     │     │     │     │           │  != │  !  │  "  │  #  │  ;  │  :  │
  *                    └────┴─────┴─────┴─────┴─────┴─────┘           └─────┴─────┴─────┴─────┴─────┴─────┘
  *                                            ┌────┐                       ┌────┐
- *                                            │    │                       │    │
+ *                                            │    │                       │ =  │
  *                                            │    ├────┐             ┌────┤    │
  *                                            └────┤SNum├────┐   ┌────┤    ├────┘
  *                                                 │    │    │   │    │    │
@@ -74,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_SNUM] = LAYOUT_split_3x6_3(
       _______, _______, _______, _______, _______, _______,                             _______, FI_SLSH, FI_LPRN, FI_RPRN, FI_QUES, FI_DIAE,
-      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                             _______, FI_CURR, FI_PERC, FI_AMPR, FI_UNDS, _______,
+      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                             FI_DLR,  MY_EURO, FI_PERC, FI_AMPR, FI_UNDS, _______,
       _______, _______, _______, _______, _______, _______,                             NOTEQUAL,FI_EXLM, FI_DQUO, FI_HASH,FI_SCLN ,FI_COLN,
                                           _______, _______, _______,  _______, _______, FI_EQL 
     ),
@@ -104,6 +116,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           _______, _______, _______, _______, _______, _______
     ),
 /*
+ * Alternative coding layer for linux, entered with LT_SPCL
+ * Changes:
+ *  - Use default finnish keycodes from keymap_finnish.h
+ *
+ */
+    [_CODE_LINUX] = LAYOUT_split_3x6_3(
+      FI_GRV,  FI_LBRC, FI_RBRC, FI_PIPE, FI_BSLS, FI_ACUT,                   _______, _______, _______, _______, _______, _______,
+      FI_TILD, FI_LCBR, FI_RCBR, FI_LPRN, FI_RPRN, FI_DQUO,                   _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
+      FI_AT,   FI_LABK, FI_RABK, FI_EXLM, FI_EQL,  FI_CIRC,                   _______, _______, _______, _______, _______, _______,
+                                          _______, _______, _______, _______, _______, _______
+    ),
+/*
  * Navigation Layer, entered with Nav
  *
  *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
@@ -114,10 +138,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                    │    │     │     │     │     │     │           │RDelW│Bspc │ Del │DelW │Ctl- │     │
  *                    └────┴─────┴─────┴─────┴─────┴─────┘           └─────┴─────┴─────┴─────┴─────┴─────┘
  *                                            ┌────┐                       ┌────┐
- *                                            │    │                       │Nav │
+ *                                            │    │                       │    │
  *                                            │    ├────┐             ┌────┤    │
- *                                            └────┤    ├────┐   ┌────┤Vol+├────┘
- *                                                 │    │Nav │   │Vol-│    │
+ *                                            └────┤    ├────┐   ┌────┤    ├────┘
+ *                                                 │    │Nav │   │    │    │
  *                                                 └────┤    │   │    ├────┘
  *                                                      └────┘   └────┘
  */
@@ -145,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                                 └────┤    │   │    ├────┘
  *                                                      └────┘   └────┘
  */
-    [_CTL] = LAYOUT_split_3x6_3(
+    [_MEDIA] = LAYOUT_split_3x6_3(
       _______, _______, _______, _______, _______, _______,                    _______, _______, KC_VOLU, _______, _______, _______,
       _______, _______, _______, _______, _______, _______,                    _______, KC_MRWD, KC_VOLD, KC_MFFD, _______, _______,
       _______, _______, _______, _______, _______, _______,                    _______, _______, _______, _______, _______, _______,
@@ -155,7 +179,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Adjust Layer, entered with LT_ENT2
  *
  *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
- *                    │ Slp│     │     │     │     │     │           │     │     │     │     │     │     │
+ *                    │ Slp│     │     │     │ MAC │Linux│           │     │     │     │     │     │     │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
  *                    │    │     │     │     │     │     │           │     │     │     │     │     │     │
  *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
@@ -170,29 +194,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                                      └────┘   └────┘
  */
     [_CTL] = LAYOUT_split_3x6_3(
-      KC_SLEP, _______, _______, _______, _______, _______,                    _______, _______, _______, _______, _______, _______,
+      KC_SLEP, _______, _______, _______, PDF(0),  PDF(1),                     _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, _______,                    _______, _______, _______, _______, _______, _______,
       _______, _______, _______, _______, _______, QK_BOOT,                    _______, _______, _______, _______, _______, _______,
                                           _______, _______, _______,  _______, _______, _______
     ),
 
-//  Layer template
-/*
- *                    ┌────┬─────┬─────┬─────┬─────┬─────┐           ┌─────┬─────┬─────┬─────┬─────┬─────┐
- *                    │    │     │     │     │     │     │           │     │     │     │     │     │     │
- *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
- *                    │    │     │     │     │     │     │           │     │     │     │     │     │     │
- *                    ├────┼─────┼─────┼─────┼─────┼─────┤           ├─────┼─────┼─────┼─────┼─────┼─────┤
- *                    │    │     │     │     │     │     │           │     │     │     │     │     │     │
- *                    └────┴─────┴─────┴─────┴─────┴─────┘           └─────┴─────┴─────┴─────┴─────┴─────┘
- *                                            ┌────┐                       ┌────┐
- *                                            │    │                       │    │
- *                                            │    ├────┐             ┌────┤    │
- *                                            └────┤    ├────┐   ┌────┤    ├────┘
- *                                                 │    │    │   │    │    │
- *                                                 └────┤    │   │    ├────┘
- *                                                      └────┘   └────┘
- */
 };
 
 // clang-format on
