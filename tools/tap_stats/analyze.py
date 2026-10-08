@@ -32,6 +32,7 @@ FLOW_TAP_TERM = 120
 HOME_F, HOME_J = 0x2209, 0x320D
 SHIFTS = {HOME_F, HOME_J}
 PERMISSIVE = SHIFTS
+NO_FLOW_TAP = SHIFTS  # get_flow_tap_term() returns 0 for these since 2026-10-08
 KC_BSPC, KC_ENT, KC_SPC = 0x2A, 0x28, 0x2C
 
 
@@ -134,6 +135,7 @@ class Press:
     dur: int
     outcome: Optional[str]  # 't', 'h', or None if the settle line was lost
     gap: Optional[int]  # ms since the previous key press
+    flow_gap: Optional[int]  # ms since the last event Flow Tap counts
     pattern: str  # 'solo', 'nested' or 'rolled'
     same_hand: bool = False
     next_tap_hold: bool = False
@@ -142,16 +144,40 @@ class Press:
     corrected: bool = False  # Backspace followed shortly after
 
 
+def flow_tap_times(events, settled):
+    """For each event index, the time of the last earlier event Flow Tap counts.
+
+    Despite the docs saying "previous key press", QMK's
+    flow_tap_update_last_event() also counts releases, except those of keys
+    that were held as a modifier or layer.
+    """
+    last, out, held = None, [], set()
+    for e in events:
+        out.append(last)
+        if e.down:
+            if is_tap_hold(e.kc) and settled.get((e.kc, e.t)) == "h":
+                held.add(e.kc)
+            last = e.t
+        elif e.kc in held:
+            held.discard(e.kc)
+        else:
+            last = e.t
+    return out
+
+
 def build_presses(events, settled, correction_ms=1000, correction_keys=3):
     downs = [i for i, e in enumerate(events) if e.down]
+    flow_last = flow_tap_times(events, settled)
     presses = []
     for n, i in enumerate(downs):
         e = events[i]
         if not is_tap_hold(e.kc) or e.release is None:
             continue
-        p = Press(e.kc, e.t, e.release - e.t, settled.get((e.kc, e.t)), None, "solo")
+        p = Press(e.kc, e.t, e.release - e.t, settled.get((e.kc, e.t)), None, None, "solo")
         if n > 0:
             p.gap = e.t - events[downs[n - 1]].t
+        if flow_last[i] is not None:
+            p.flow_gap = e.t - flow_last[i]
         if n + 1 < len(downs):
             nxt = events[downs[n + 1]]
             if nxt.t < e.release:
@@ -175,7 +201,9 @@ def build_presses(events, settled, correction_ms=1000, correction_keys=3):
 def in_flow_zone(p: Press) -> bool:
     """Flow Tap may have forced a tap; it depends on the previous key, which the
     log keeps anonymous, so such presses are left out of the term model."""
-    return p.gap is not None and p.gap < FLOW_TAP_TERM and p.kc & 0xFF in FLOW_TAP_BASES
+    if p.kc in NO_FLOW_TAP:
+        return False
+    return p.flow_gap is not None and p.flow_gap < FLOW_TAP_TERM and p.kc & 0xFF in FLOW_TAP_BASES
 
 
 def predict(p: Press, term: int) -> Optional[str]:
@@ -267,7 +295,7 @@ def report(presses, terms):
     flow = sum(in_flow_zone(p) for p in presses)
     print("== Model check ==")
     print(f"{agree}/{len(modelled)} ({share(agree, len(modelled))}) of modelled presses settle as the model predicts")
-    print(f"at today's terms; {flow} presses within FLOW_TAP_TERM of the previous key are left out.")
+    print(f"at today's terms; {flow} presses within FLOW_TAP_TERM of the previous key event are left out.")
     print("Below ~95% agreement, treat the what-if numbers with suspicion.\n")
 
     print("== What if: presses that would settle differently ==")

@@ -47,8 +47,10 @@ most) further writes are discarded instantly.
 - **Model check**: the what-if table replays presses through a model of
   Chordal Hold, per-key Permissive Hold and the same-hand shift stretch. This
   line says how often that model matches what the firmware actually did.
-  Presses within `FLOW_TAP_TERM` of the previous key are left out, because
-  Flow Tap depends on the previous key's identity, which is not logged.
+  Presses within `FLOW_TAP_TERM` of the previous key event are left out,
+  because Flow Tap depends on the previous key's identity, which is not
+  logged. Note "event": despite QMK's docs saying "previous key press", its
+  code also counts releases (except of held modifiers and layers).
 - **What if**: for each candidate term, how many presses would settle the
   other way, and how many of those were followed by Backspace. A flip that
   was usually corrected is a fix; one that was not is a new misfire.

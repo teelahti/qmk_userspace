@@ -68,6 +68,21 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+// Flow Tap counts from the previous key's release as well as its press, so in
+// normal typing a shift pressed just after letting go of a letter is forced to
+// a tap and the capital is lost. tools/tap_stats data showed exactly that, and
+// no accidental shifts that Flow Tap was preventing; Chordal Hold already
+// guards same-hand rolls. Keep Flow Tap for the other home row mods.
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
+    if (keycode == HOME_F || keycode == HOME_J) {
+        return 0;
+    }
+    if (is_flow_tap_key(keycode) && is_flow_tap_key(prev_keycode)) {
+        return FLOW_TAP_TERM;
+    }
+    return 0;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef TAP_STATS_ENABLE
     tap_stats_process(keycode, record);
