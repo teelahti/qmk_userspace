@@ -4,6 +4,9 @@
 #include "sendstring_finnish.h"
 #include "eeconfig.h"
 #include "teelahti.h"
+#ifdef TAP_STATS_ENABLE
+#    include "tap_stats.h"
+#endif
 
 // Chordal hold only enforces the opposite hands rule within the tapping term.
 // When the second key is itself a same-hand tap-hold key (F then A), QMK does
@@ -16,6 +19,9 @@ static bool     shift_pending         = false;
 static bool     same_hand_after_shift = false;
 
 bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef TAP_STATS_ENABLE
+    tap_stats_pre_process(keycode, record);
+#endif
     if (keycode == HOME_F || keycode == HOME_J) {
         shift_pending         = record->event.pressed;
         shift_pos             = record->event.key;
@@ -63,6 +69,9 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef TAP_STATS_ENABLE
+    tap_stats_process(keycode, record);
+#endif
     switch (keycode) {
         case NOTEQUAL:
             if (record->event.pressed) {
@@ -85,10 +94,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
     }
-        // If console is enabled, it will print the matrix position and status of each key pressed
-#ifdef CONSOLE_ENABLE
-    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-#endif
     return true;
 };
 

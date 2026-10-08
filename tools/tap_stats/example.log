@@ -1,0 +1,46 @@
+# 1 solo f tap 90ms
+TS p 500 L 0 2209
+TS r 590 L 0 2209
+TS t 500 2209
+# 2 same-hand roll f->a, a up at 150
+TS p 990 L 0 2209
+TS p 1030 L 1 2804
+TS r 1140 L 1 2804
+TS t 990 2209
+TS t 1030 2804
+TS r 1150 L 0 2209
+# 3 nested opposite shift+u then backspace
+TS p 1550 L 0 2209
+TS p 1610 R 1 0000
+TS r 1660 R 1 0000
+TS h 1550 2209
+TS r 1690 L 0 2209
+TS p 1840 R 0 002A
+TS r 1900 R 0 002A
+# 4 rolled opposite f->u, f up at 130 (hold)
+TS p 2300 L 0 2209
+TS p 2350 R 1 0000
+TS h 2300 2209
+TS r 2430 L 0 2209
+TS r 2460 R 1 0000
+# 6 two anon left keys overlapping, then J shift + left key nested
+TS p 2860 L 0 0000
+TS p 2890 L 1 2209
+TS t 2890 2209
+TS r 2910 L 0 0000
+TS r 2950 L 1 2209
+TS p 3250 R 0 320D
+TS h 3250 320D
+TS p 3400 L 1 0000
+TS r 3460 L 1 0000
+TS r 3500 R 0 320D
+# 7 space layer-tap solo and quick roll
+TS p 3900 R 0 412C
+TS r 3980 R 0 412C
+TS t 3900 412C
+# 5 f then same-hand plain g
+TS p 4280 L 0 2209
+TS p 4320 L 1 0000
+TS t 4280 2209
+TS r 4380 L 0 2209
+TS r 4400 L 1 0000
