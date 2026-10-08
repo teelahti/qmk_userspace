@@ -5,6 +5,27 @@
 #include "eeconfig.h"
 #include "teelahti.h"
 
+// Chordal hold only enforces the opposite hands rule within the tapping term.
+// When the second key is itself a same-hand tap-hold key (F then A), QMK does
+// not settle F on that press but waits for A's release, so with the short shift
+// term below an ordinary "fa" roll often outlasts it and comes out as "A".
+// Achordion used to block this for up to a second. Restore the full tapping term
+// for exactly that case; opposite-hand shifting stays fast.
+static keypos_t shift_pos;
+static bool     shift_pending         = false;
+static bool     same_hand_after_shift = false;
+
+bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == HOME_F || keycode == HOME_J) {
+        shift_pending         = record->event.pressed;
+        shift_pos             = record->event.key;
+        same_hand_after_shift = false;
+    } else if (shift_pending && record->event.pressed && (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode)) && chordal_hold_handedness(record->event.key) == chordal_hold_handedness(shift_pos)) {
+        same_hand_after_shift = true;
+    }
+    return true;
+}
+
 // Per key tapping term settings
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -21,7 +42,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         // activate more eagerly, reducing missed shifts during fast typing.
         case HOME_J:
         case HOME_F:
-            return TAPPING_TERM - 100;
+            return same_hand_after_shift ? TAPPING_TERM : TAPPING_TERM - 100;
 
         default:
             return TAPPING_TERM;

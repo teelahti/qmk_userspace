@@ -12,3 +12,7 @@
 #    define LED_CAPS_LOCK_PIN 24
 #    define LED_PIN_ON_STATE 0
 #endif
+
+// rev3's ATmega32U4 runs at ~99% of flash and LTO is already on at keyboard
+// level. No one-shot keys are used anywhere, so drop that machinery.
+#define NO_ACTION_ONESHOT
