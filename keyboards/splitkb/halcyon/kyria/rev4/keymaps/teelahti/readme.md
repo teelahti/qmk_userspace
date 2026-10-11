@@ -4,6 +4,11 @@ Compile with the following, then copy the uf2 to disk:
 
     qmk compile -kb splitkb/halcyon/kyria/rev4 -km teelahti
 
+Double-tapping reset no longer enters the bootloader (see `config.h`). Use
+QK_BOOT instead: hold the right Enter and press B. It reboots whichever half is
+plugged in, so to flash the other half plug that one in alone. If the firmware
+is ever too broken for that, hold the controller's Boot button while plugging in.
+
 ## Slave half not lighting up after a KVM switch
 
 See `config.h` for the reasoning. Short version: the slave's LEDs are driven

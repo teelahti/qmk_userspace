@@ -11,15 +11,19 @@
 // Two ways that can happen on this board, both provoked by the flaky VBUS a
 // monitor hub / KVM produces:
 
-// 1. rev4/config.h sets RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT to 1000U.
-//    That leaves a full second at every boot where the double-tap magic word is
-//    live in SRAM; any reset landing in that window -- including a brownout on
-//    the slave, whose 5V arrives through the interconnect -- makes the RP2040
-//    jump into the UF2 bootloader instead of the firmware. The half then sits
-//    there dark until it is power cycled. 200U is the QMK default and shrinks
-//    the vulnerable window 5x while still allowing a deliberate double tap.
-#undef RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 200U
+// 1. rev4/config.h enables the RP2040 double-tap reset with a 1000ms window.
+//    During that window at every boot the double-tap magic word is live in
+//    SRAM; any reset landing in it -- including a power bounce while the
+//    cable is plugged in, which reaches the slave through the interconnect --
+//    makes the RP2040 jump into the UF2 bootloader instead of the firmware.
+//    The half then sits there dark until it is power cycled. Shrinking the
+//    window to 200ms made this rarer but the boot log (users/teelahti/boot_log.c)
+//    still caught it on 2026-10-11: a plug-in where the master never heard from
+//    the slave and the slave logged no boot at all. So the double tap is off.
+//    Enter the bootloader with QK_BOOT (Ctl layer, right Enter + B), which
+//    reboots whichever half is plugged in, or hold the controller's Boot button
+//    while plugging in.
+#define NO_DOUBLE_TAP_RESET // applied in users/teelahti/post_config.h
 
 // 2. If the slave ever misreads USB_VBUS_PIN as high it declares itself master,
 //    never calls transport_slave_init(), and then wedges forever in the
