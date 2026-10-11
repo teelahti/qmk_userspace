@@ -18,6 +18,7 @@ enum layers {
 enum custom_keycodes {
     NOTEQUAL = SAFE_RANGE,
     MY_EURO,
+    BOOT_LOG_DUMP,
 };
 
 // Left hand home row

@@ -7,6 +7,9 @@
 #ifdef TAP_STATS_ENABLE
 #    include "tap_stats.h"
 #endif
+#ifdef BOOT_LOG_ENABLE
+#    include "boot_log.h"
+#endif
 
 // Chordal hold only enforces the opposite hands rule within the tapping term.
 // When the second key is itself a same-hand tap-hold key (F then A), QMK does
@@ -112,6 +115,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_mods(mods);
             }
             return false;
+#ifdef BOOT_LOG_ENABLE
+        case BOOT_LOG_DUMP:
+            if (record->event.pressed) {
+                boot_log_dump();
+            }
+            return false;
+#endif
     }
     return true;
 };

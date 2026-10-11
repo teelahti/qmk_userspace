@@ -1,6 +1,10 @@
 #include QMK_KEYBOARD_H
 #include "keymap.h"
 #include "teelahti.h"
+#include "usb_util.h"
+#ifdef BOOT_LOG_ENABLE
+#    include "boot_log.h"
+#endif
 
 
 // clang-format off
@@ -158,11 +162,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * Adjust Layer, entered with LT_ENT2.
  * Led settings directly copied from Halcyon/Kyria/rev4 default keymap
+ * BLog prints both halves' boot logs to the QMK console (users/teelahti/boot_log.c).
  *
  * ,-----------------------------------------.                              ,-----------------------------------------.
  * | Sleep|      |      |      |  MAC | Linux|                              |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                              |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                              |  TOG |  SAI | HUI  | VAI  | MOD  |      |
+ * |      |      |      | BLog |      |      |                              |  TOG |  SAI | HUI  | VAI  | MOD  |      |
  * |------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+------|
  * |      |      |      |      |      | RES  |      |      |  |      |      |      |  SAD | HUD  | VAD  | RMOD |      |
  * `--------------------+------+------+------+------+------|  |------+------+------+------+------+--------------------'
@@ -172,10 +177,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_CTL] = LAYOUT(
       KC_SLEP, _______, _______, _______,  PDF(0),  PDF(1),                                     _______, _______, _______, _______, _______, _______,
-      _______, _______, _______, _______, _______, _______,                                     RM_TOGG, RM_SATU, RM_HUEU, RM_VALU, RM_NEXT, _______,
+      _______, _______, _______, BOOT_LOG_DUMP, _______, _______,                               RM_TOGG, RM_SATU, RM_HUEU, RM_VALU, RM_NEXT, _______,
       _______, _______, _______, _______, _______, QK_BOOT, _______, _______, _______, _______, _______, RM_SATD, RM_HUED, RM_VALD, RM_PREV, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 };
 
 // clang-format on
+
+// A half decides at boot whether it is the master by reading USB_VBUS_PIN once.
+// If the slave misreads it during the messy power-up a KVM switch causes, it
+// waits forever for a host that is not there, dark and with dead keys (see
+// config.h). A real master always has VBUS on its own port, so a master that
+// has seen none for a while restarts and comes back up as the slave. This runs
+// from the suspend loop too, which is where such a half usually ends up.
+#define FALSE_MASTER_TIMEOUT 100
+
+static void reset_if_false_master(void) {
+    static bool     vbus_lost = false;
+    static uint16_t vbus_lost_since;
+    if (!is_keyboard_master() || usb_vbus_state()) {
+        vbus_lost = false;
+    } else if (!vbus_lost) {
+        vbus_lost       = true;
+        vbus_lost_since = timer_read();
+    } else if (timer_elapsed(vbus_lost_since) > FALSE_MASTER_TIMEOUT) {
+#ifdef BOOT_LOG_ENABLE
+        boot_log_false_master_reset();
+#endif
+        mcu_reset();
+    }
+}
+
+void housekeeping_task_user(void) {
+    reset_if_false_master();
+#ifdef BOOT_LOG_ENABLE
+    boot_log_task();
+#endif
+}
+
+void suspend_power_down_user(void) {
+    reset_if_false_master();
+}
