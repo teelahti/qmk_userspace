@@ -30,8 +30,9 @@ DEFAULT_DIR = os.path.expanduser(os.environ.get("TAP_STATS_DIR", "~/.local/share
 TAPPING_TERM = 220
 FLOW_TAP_TERM = 120
 HOME_F, HOME_J = 0x2209, 0x320D
+LT_NUM = 0x424C
 SHIFTS = {HOME_F, HOME_J}
-PERMISSIVE = SHIFTS
+PERMISSIVE = SHIFTS | {LT_NUM}  # LT_NUM since 2026-10-11
 NO_FLOW_TAP = SHIFTS  # get_flow_tap_term() returns 0 for these since 2026-10-08
 KC_BSPC, KC_ENT, KC_SPC = 0x2A, 0x28, 0x2C
 

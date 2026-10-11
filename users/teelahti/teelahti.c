@@ -56,12 +56,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Used alongside chordal hold: permissive hold is enabled per key below,
-// not globally, so only the shift keys get the faster resolution.
+// not globally, so only the keys below get the faster resolution.
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        // Enable permissive hold for shift, but keep it disabled for all other keys
+        // Enable permissive hold for shift, but keep it disabled for the other home row mods
         case HOME_F:
         case HOME_J:
+        // A number typed while holding Num often ends just inside the tapping term
+        // (Num released at ~200ms), which came out as Delete plus a letter in
+        // tools/tap_stats data. Delete is hardly ever tapped on purpose.
+        case LT_NUM:
             return true;
         default:
             return false;
