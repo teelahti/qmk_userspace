@@ -188,12 +188,22 @@ def build_presses(events, settled, correction_ms=1000, correction_keys=3):
                 p.next_at = nxt.t - e.t
                 p.next_up = None if nxt.release is None else nxt.release - e.t
         # Misfire proxy: Backspace within a few keys and correction_ms of release.
-        for later in downs[n + 1 : n + 1 + correction_keys + 1]:
-            ev = events[later]
+        # Keys pressed while a hold is still down were chorded with it on purpose
+        # (Cmd+Backspace deletes a line), so for holds they are skipped and do not
+        # use up the key budget. A Backspace rolled into while a tap is still down
+        # is a quick correction and still counts.
+        seen = 0
+        for later in range(n + 1, len(downs)):
+            ev = events[downs[later]]
             if ev.t - e.release > correction_ms:
                 break
+            if p.outcome == "h" and ev.t < e.release:
+                continue
             if is_bspc(ev.kc):
                 p.corrected = True
+                break
+            seen += 1
+            if seen > correction_keys:
                 break
         presses.append(p)
     return presses

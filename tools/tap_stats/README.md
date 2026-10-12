@@ -38,8 +38,11 @@ most) further writes are discarded instantly.
 
 - **Settlement per key**: hold share, how long real taps last (p50/p90/p99),
   and how often a tap or a hold was followed by Backspace within about a
-  second. A tapping term under a key's tap p99 eats letters; a high
-  `bspc|hold` points at accidental holds.
+  second. For a hold, that counts from its release: keys pressed while it was
+  down, like the Backspace in Cmd+Backspace, were chorded on purpose. A tapping
+  term under a key's tap p99 eats letters; a high `bspc|hold` points at
+  accidental holds, except on layer keys like Nav, where editing after
+  navigating is normal.
 - **Overlap patterns**: what decided each press. `solo` = released before
   the next key; `nested` = next key pressed and released inside it; `rolled`
   = next key still down when it was released. `same`/`opp` hand, and whether
