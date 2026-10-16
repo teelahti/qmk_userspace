@@ -42,10 +42,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         // as layer change
         case LT_ENT:
         case LT_ENT2:
+            return TAPPING_TERM - 80;
+
+        // Space has permissive hold below, so a symbol typed under it settles
+        // as a hold regardless of this term, which now only decides a Space
+        // held alone. Without Flow Tap to force those into taps, 140 lost
+        // spaces held a little long after a letter; 170 keeps nearly all.
         case LT_SPC:
         case LT_SPCL:
         case LT_SPC2:
-            return TAPPING_TERM - 80;
+            return TAPPING_TERM - 50;
 
         // Shift is used frequently and quickly. A shorter tapping term makes shift
         // activate more eagerly, reducing missed shifts during fast typing.
@@ -69,6 +75,11 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
         // (Num released at ~200ms), which came out as Delete plus a letter in
         // tools/tap_stats data. Delete is hardly ever tapped on purpose.
         case LT_NUM:
+        // A quick symbol under Space (the symbol key released before Space,
+        // inside the term) came out as a space plus a letter.
+        case LT_SPC:
+        case LT_SPCL:
+        case LT_SPC2:
             return true;
         default:
             return false;
@@ -80,9 +91,18 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 // a tap and the capital is lost. tools/tap_stats data showed exactly that, and
 // no accidental shifts that Flow Tap was preventing; Chordal Hold already
 // guards same-hand rolls. Keep Flow Tap for the other home row mods.
+//
+// The Space layer keys count as flow tap keys too, so a symbol typed right
+// after a letter ("foo(" via Space+D) was forced into a space and a letter:
+// 10 of 12 such presses in the tap_stats logs were followed by Backspace.
 uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
-    if (keycode == HOME_F || keycode == HOME_J) {
-        return 0;
+    switch (keycode) {
+        case HOME_F:
+        case HOME_J:
+        case LT_SPC:
+        case LT_SPCL:
+        case LT_SPC2:
+            return 0;
     }
     if (is_flow_tap_key(keycode) && is_flow_tap_key(prev_keycode)) {
         return FLOW_TAP_TERM;

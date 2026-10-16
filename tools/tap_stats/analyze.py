@@ -31,15 +31,19 @@ TAPPING_TERM = 220
 FLOW_TAP_TERM = 120
 HOME_F, HOME_J = 0x2209, 0x320D
 LT_NUM = 0x424C
+LT_SPC, LT_SPCL, LT_SPC2 = 0x462C, 0x472C, 0x432C
+SPACES = {LT_SPC, LT_SPCL, LT_SPC2}
 SHIFTS = {HOME_F, HOME_J}
-PERMISSIVE = SHIFTS | {LT_NUM}  # LT_NUM since 2026-10-11
-NO_FLOW_TAP = SHIFTS  # get_flow_tap_term() returns 0 for these since 2026-10-08
+PERMISSIVE = SHIFTS | {LT_NUM} | SPACES  # LT_NUM since 2026-10-11, spaces since 2026-10-16
+NO_FLOW_TAP = SHIFTS | SPACES  # get_flow_tap_term() returns 0; shifts since 2026-10-08, spaces 2026-10-16
 KC_BSPC, KC_ENT, KC_SPC = 0x2A, 0x28, 0x2C
 
 
 def current_term(kc: int) -> int:
     if kc in SHIFTS:
         return TAPPING_TERM - 100
+    if kc in SPACES:
+        return TAPPING_TERM - 50  # 140 like Enter before 2026-10-16
     if is_layer_tap(kc) and kc & 0xFF in (KC_ENT, KC_SPC):
         return TAPPING_TERM - 80
     return TAPPING_TERM
