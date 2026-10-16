@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(qmk config *)",
+      "Bash(qmk compile *)",
+      "Bash(hidutil list *)",
+      "Bash(defaults read *)",
+      "Bash(ioreg -c IOHIDInterface -r -l -w0)",
+      "Bash(ioreg -n \"Trackball Nano\" -r -l -w0)",
+      "Bash(hidutil property *)",
+      "Read(//Users/tero/r/**)",
+      "Read(//Users/tero/r/qmk_firmware/**)"
+    ]
+  }
+}
